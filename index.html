@@ -1,0 +1,2132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANEL TERRITORIOS CONGREGACION LONCOMILLA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .main-layout {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px 20px;
+            width: 250px;
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-menu button {
+            width: 100%;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: #3498db;
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+        }
+
+        .sidebar-menu button:hover {
+            background: #2980b9;
+            transform: translateX(5px);
+        }
+
+        .sidebar-menu button:active {
+            transform: translateX(3px);
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px 60px;
+            width: 100%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .content {
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .grid-buttons {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            padding: 20px;
+            background: #2c3e50;
+            border-radius: 10px;
+        }
+
+        .territory-btn {
+            padding: 25px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .territory-btn::before {
+            content: attr(data-territorio);
+            position: absolute;
+            top: 5px;
+            left: 8px;
+            font-size: 0.7em;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+
+        .territory-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .territory-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .percentage {
+            display: block;
+            font-size: 0.8em;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+
+        /* Colores según porcentaje */
+        .green-high { background: #1abc9c; }
+        .green-med { background: #3498db; }
+        .green-light { background: #9b59b6; }
+        .yellow-green { background: #f39c12; }
+        .yellow { background: #e67e22; }
+        .orange { background: #e74c3c; }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 90%;
+            max-height: 90vh;
+            width: auto;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+
+        .modal-header h2 {
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .close-btn:hover {
+            background: #c0392b;
+        }
+
+        .territory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .territory-table th {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .territory-table td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ecf0f1;
+            position: relative;
+        }
+
+        .territory-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .dias-cell, .fecha-cell {
+            cursor: help;
+        }
+
+        .dias-cell:hover::after, .fecha-cell:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            white-space: nowrap;
+            font-size: 0.9em;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .dias-cell:hover::before, .fecha-cell:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(5px);
+            border: 5px solid transparent;
+            border-top-color: #2c3e50;
+            z-index: 1001;
+        }
+
+        .promedio-cell {
+            font-size: 1.5em;
+            font-weight: bold;
+            background: #ecf0f1 !important;
+        }
+
+        /* Modal de Estadísticas */
+        .stats-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stats-modal.active {
+            display: flex;
+        }
+
+        .stats-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 95%;
+            max-height: 90vh;
+            width: 1000px;
+            overflow-y: auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h4 {
+            margin: 0 0 10px 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .stat-card .value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .stats-table th {
+            background: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .stats-table td {
+            padding: 10px 12px;
+            border: 1px solid #ecf0f1;
+        }
+
+        .stats-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .stats-table tr:hover {
+            background: #e8f4f8;
+        }
+
+        /* Gráficos */
+        .chart-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-card h4 {
+            color: #2c3e50;
+            margin: 0 0 15px 0;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 150px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .bar {
+            flex: 1;
+            margin: 0 2px;
+            background: linear-gradient(to top, #3498db, #5dade2);
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .bar:hover {
+            background: linear-gradient(to top, #2980b9, #3498db);
+            transform: translateY(-5px);
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .bar-label {
+            font-size: 0.7em;
+            color: #7f8c8d;
+            margin-top: 5px;
+        }
+
+        .chart-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .chart-stat {
+            text-align: center;
+        }
+
+        .chart-stat-label {
+            font-size: 0.7em;
+            color: #7f8c8d;
+            margin-bottom: 3px;
+        }
+
+        .chart-stat-value {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        /* Reportes */
+        .report-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .report-card {
+            background: white;
+            border: 2px solid #ecf0f1;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .report-card:hover {
+            border-color: #3498db;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .report-card-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .report-card-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .report-card-desc {
+            font-size: 0.9em;
+            color: #7f8c8d;
+        }
+
+        .print-only {
+            display: none;
+        }
+
+        @media print {
+            .sidebar, .modal-header button, .no-print {
+                display: none !important;
+            }
+            
+            .print-only {
+                display: block;
+            }
+
+            body {
+                background: white;
+            }
+
+            .stats-content {
+                max-width: 100%;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-layout">
+        <!-- Menú lateral -->
+        <aside class="sidebar">
+            <h3>📊 Estadísticas</h3>
+            <ul class="sidebar-menu">
+                <li><button onclick="mostrarEstadisticas()">📈 Ver Estadísticas</button></li>
+                <li><button onclick="mostrarResumen()">📋 Resumen General</button></li>
+                <li><button onclick="mostrarGraficos()">📊 Gráficos</button></li>
+                <li><button onclick="mostrarTopAtrasos()">🔥 Top 5 Atrasos</button></li>
+                <li><button onclick="mostrarReportes()">📄 Reportes</button></li>
+                <li><button onclick="window.open('https://www.google.com/maps/@-35.5970941,-71.7360199,15z/data=!3m1!4b1!4m2!6m1!1s1cZ9jXIbmlDjukHoYE_TVe09sZkg4Saw?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwNy4wIKXMDSoKLDEwMDc5MjA2OUgBUAM%3D','_blank')">🗺️ Links Mapa</button></li>
+                <li><button onclick="mostrarActualizar()">🔄 Actualizar Datos</button></li>
+            </ul>
+        </aside>
+
+        <!-- Contenido principal -->
+        <div class="container">
+        <h1>Panel de Territorios</h1>
+        <div class="subtitle">Congregación Loncomilla</div>
+        <div class="content">
+            <!-- Leyenda de colores -->
+            <div style="display: flex; gap: 16px; align-items: center; margin: 8px 0 16px 0; color: #2c3e50;">
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 16px; height: 16px; background: #27ae60; border-radius: 3px; border: 1px solid #1e8c4d;"></span>
+                    <span>Sin atraso</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <span style="display: inline-block; width: 16px; height: 16px; background: #e74c3c; border-radius: 3px; border: 1px solid #c0392b;"></span>
+                    <span>Con atraso</span>
+                </div>
+            </div>
+            <div class="grid-buttons">
+                <button class="territory-btn" style="background: #e74c3c;" onclick="openModal(1)" data-territorio="T.1">1</button>
+                <button class="territory-btn" style="background: #3498db;" onclick="openModal(2)" data-territorio="T.2">2</button>
+                <button class="territory-btn" style="background: #2ecc71;" onclick="openModal(3)" data-territorio="T.3">3</button>
+                <button class="territory-btn" style="background: #f39c12;" onclick="openModal(4)" data-territorio="T.4">4</button>
+                <button class="territory-btn" style="background: #9b59b6;" onclick="openModal(5)" data-territorio="T.5">5</button>
+                <button class="territory-btn" style="background: #1abc9c;" onclick="openModal(6)" data-territorio="T.6">6</button>
+                <button class="territory-btn" style="background: #e67e22;" onclick="openModal(7)" data-territorio="T.7">7</button>
+                
+                <button class="territory-btn" style="background: #34495e;" onclick="openModal(8)" data-territorio="T.8">8</button>
+                <button class="territory-btn" style="background: #16a085;" onclick="openModal(9)" data-territorio="T.9">9</button>
+                <button class="territory-btn" style="background: #27ae60;" onclick="openModal(10)" data-territorio="T.10">10</button>
+                <button class="territory-btn" style="background: #2980b9;" onclick="openModal(11)" data-territorio="T.11">11</button>
+                <button class="territory-btn" style="background: #8e44ad;" onclick="openModal(12)" data-territorio="T.12">12</button>
+                <button class="territory-btn" style="background: #f1c40f;" onclick="openModal(13)" data-territorio="T.13">13</button>
+                <button class="territory-btn" style="background: #c0392b;" onclick="openModal(14)" data-territorio="T.14">14</button>
+                
+                <button class="territory-btn" style="background: #d35400;" onclick="openModal(15)" data-territorio="T.15">15</button>
+                <button class="territory-btn" style="background: #7f8c8d;" onclick="openModal(16)" data-territorio="T.16">16</button>
+                <button class="territory-btn" style="background: #2c3e50;" onclick="openModal(17)" data-territorio="T.17">17</button>
+                <button class="territory-btn" style="background: #e91e63;" onclick="openModal(18)" data-territorio="T.18">18</button>
+                <button class="territory-btn" style="background: #009688;" onclick="openModal(19)" data-territorio="T.19">19</button>
+                <button class="territory-btn" style="background: #673ab7;" onclick="openModal(20)" data-territorio="T.20">20</button>
+                <button class="territory-btn" style="background: #ff5722;" onclick="openModal(21)" data-territorio="T.21">21</button>
+                
+                <button class="territory-btn" style="background: #795548;" onclick="openModal(22)" data-territorio="T.22">22</button>
+                <button class="territory-btn" style="background: #607d8b;" onclick="openModal(23)" data-territorio="T.23">23</button>
+                <button class="territory-btn" style="background: #4caf50;" onclick="openModal(24)" data-territorio="T.24">24</button>
+                <button class="territory-btn" style="background: #00bcd4;" onclick="openModal(25)" data-territorio="T.25">25</button>
+                <button class="territory-btn" style="background: #ffc107;" onclick="openModal(26)" data-territorio="T.26">26</button>
+                <button class="territory-btn" style="background: #9c27b0;" onclick="openModal(27)" data-territorio="T.27">27</button>
+                <button class="territory-btn" style="background: #ff9800;" onclick="openModal(28)" data-territorio="T.28">28</button>
+                
+                <button class="territory-btn" style="background: #03a9f4;" onclick="openModal(29)" data-territorio="T.29">29</button>
+                <button class="territory-btn" style="background: #8bc34a;" onclick="openModal(30)" data-territorio="T.30">30</button>
+                <button class="territory-btn" style="background: #cddc39;" onclick="openModal(31)" data-territorio="T.31">31</button>
+                <button class="territory-btn" style="background: #ffeb3b;" onclick="openModal(32)" data-territorio="T.32">32</button>
+                <button class="territory-btn" style="background: #ff6f00;" onclick="openModal(33)" data-territorio="T.33">33</button>
+                <button class="territory-btn" style="background: #bf360c;" onclick="openModal(34)" data-territorio="T.34">34</button>
+                <button class="territory-btn" style="background: #455a64;" onclick="openModal(35)" data-territorio="T.35">35</button>
+                
+                <button class="territory-btn" style="background: #880e4f;" onclick="openModal(36)" data-territorio="T.36">36</button>
+                <button class="territory-btn" style="background: #4a148c;" onclick="openModal(37)" data-territorio="T.37">37</button>
+                <button class="territory-btn" style="background: #311b92;" onclick="openModal(38)" data-territorio="T.38">38</button>
+                <button class="territory-btn" style="background: #1a237e;" onclick="openModal(39)" data-territorio="T.39">39</button>
+                <button class="territory-btn" style="background: #01579b;" onclick="openModal(40)" data-territorio="T.40">40</button>
+                <button class="territory-btn" style="background: #006064;" onclick="openModal(41)" data-territorio="T.41">41</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Modal de Estadísticas -->
+    <div id="statsModal" class="stats-modal">
+        <div class="stats-content">
+            <div class="modal-header">
+                <h2>📊 Estadísticas Generales</h2>
+                <button class="close-btn" onclick="closeStatsModal()">✕</button>
+            </div>
+            <div id="statsContainer"></div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="territoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Territorio</h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <table class="territory-table">
+                <thead>
+                    <tr>
+                        <th>T</th>
+                        <th>LETRAS</th>
+                        <th>Total días</th>
+                        <th>X FECHA</th>
+                        <th>PROMEDIO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Se llenará dinámicamente con JavaScript -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Base de datos interna (sin necesidad de archivo externo)
+        let territoriosData = {
+            1: {
+                nombre: "Territorio 1",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 10 },
+                    { letra: "B", totalDias: 0, xFecha: 10 },
+                    { letra: "C", totalDias: 0, xFecha: 10 }
+                ],
+                promedio: 24
+            },
+            2: {
+                nombre: "Territorio 2",
+                letras: [
+                    { letra: "A", totalDias: 40, xFecha: 5 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 0, xFecha: 6 },
+                    { letra: "E", totalDias: 0, xFecha: 6 },
+                    { letra: "F", totalDias: 0, xFecha: 5 },
+                    { letra: "G", totalDias: 40, xFecha: 4 },
+                    { letra: "H", totalDias: 40, xFecha: 4 },
+                    { letra: "I", totalDias: 40, xFecha: 4 },
+                    { letra: "J", totalDias: 40, xFecha: 3 },
+                    { letra: "K", totalDias: 40, xFecha: 3 },
+                    { letra: "L", totalDias: 40, xFecha: 3 },
+                    { letra: "M", totalDias: 40, xFecha: 3 }
+                ],
+                promedio: 21
+            },
+            3: {
+                nombre: "Territorio 3",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 0, xFecha: 6 },
+                    { letra: "E", totalDias: 0, xFecha: 6 },
+                    { letra: "F", totalDias: 0, xFecha: 6 },
+                    { letra: "G", totalDias: 0, xFecha: 6 },
+                    { letra: "H", totalDias: 0, xFecha: 6 },
+                    { letra: "I", totalDias: 0, xFecha: 6 },
+                    { letra: "J", totalDias: 0, xFecha: 6 },
+                    { letra: "K", totalDias: 0, xFecha: 5 },
+                    { letra: "L", totalDias: 0, xFecha: 5 },
+                    { letra: "M", totalDias: 0, xFecha: 5 },
+                    { letra: "N", totalDias: 0, xFecha: 5 }
+                ],
+                promedio: 29
+            },
+            4: {
+                nombre: "Territorio 4",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 4 },
+                    { letra: "B", totalDias: 0, xFecha: 4 },
+                    { letra: "C", totalDias: 0, xFecha: 4 },
+                    { letra: "D", totalDias: 0, xFecha: 4 },
+                    { letra: "E", totalDias: 0, xFecha: 4 }
+                ],
+                promedio: 27
+            },
+            5: {
+                nombre: "Territorio 5",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 4 },
+                    { letra: "B", totalDias: 0, xFecha: 4 },
+                    { letra: "C", totalDias: 0, xFecha: 4 },
+                    { letra: "D", totalDias: 0, xFecha: 5 },
+                    { letra: "E", totalDias: 0, xFecha: 6 }
+                ],
+                promedio: 19
+            },
+            6: {
+                nombre: "Territorio 6",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 7 },
+                    { letra: "B", totalDias: 0, xFecha: 7 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 0, xFecha: 5 }
+                ],
+                promedio: 29
+            },
+            7: {
+                nombre: "Territorio 7",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 5 },
+                    { letra: "B", totalDias: 33, xFecha: 4 },
+                    { letra: "C", totalDias: 33, xFecha: 4 },
+                    { letra: "D", totalDias: 33, xFecha: 4 },
+                    { letra: "E", totalDias: 33, xFecha: 4 },
+                    { letra: "F", totalDias: 33, xFecha: 4 }
+                ],
+                promedio: 29
+            },
+            8: {
+                nombre: "Territorio 8",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 4 },
+                    { letra: "B", totalDias: 0, xFecha: 4 },
+                    { letra: "C", totalDias: 0, xFecha: 4 },
+                    { letra: "D", totalDias: 16, xFecha: 3 },
+                    { letra: "E", totalDias: 16, xFecha: 3 },
+                    { letra: "F", totalDias: 16, xFecha: 3 },
+                    { letra: "G", totalDias: 16, xFecha: 3 }
+                ],
+                promedio: 49
+            },
+            9: {
+                nombre: "Territorio 9",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 4 },
+                    { letra: "D", totalDias: 0, xFecha: 6 },
+                    { letra: "E", totalDias: 0, xFecha: 6 },
+                    { letra: "F", totalDias: 0, xFecha: 6 },
+                    { letra: "G", totalDias: 0, xFecha: 6 },
+                    { letra: "H", totalDias: 0, xFecha: 6 },
+                    { letra: "I", totalDias: 0, xFecha: 5 }
+                ],
+                promedio: 35
+            },
+            10: {
+                nombre: "Territorio 10",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 4 },
+                    { letra: "B", totalDias: 0, xFecha: 4 },
+                    { letra: "C", totalDias: 0, xFecha: 4 },
+                    { letra: "D", totalDias: 0, xFecha: 4 },
+                    { letra: "E", totalDias: 0, xFecha: 4 },
+                    { letra: "F", totalDias: 0, xFecha: 4 },
+                    { letra: "G", totalDias: 0, xFecha: 4 }
+                ],
+                promedio: 48
+            },
+            11: {
+                nombre: "Territorio 11",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 4 },
+                    { letra: "B", totalDias: 0, xFecha: 4 },
+                    { letra: "C", totalDias: 0, xFecha: 4 },
+                    { letra: "D", totalDias: 0, xFecha: 3 },
+                    { letra: "E", totalDias: 0, xFecha: 4 },
+                    { letra: "F", totalDias: 0, xFecha: 4 },
+                    { letra: "G", totalDias: 0, xFecha: 4 },
+                    { letra: "H", totalDias: 0, xFecha: 4 }
+                ],
+                promedio: 45
+            },
+            12: {
+                nombre: "Territorio 12",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 3 },
+                    { letra: "B", totalDias: 0, xFecha: 3 },
+                    { letra: "C", totalDias: 0, xFecha: 3 },
+                    { letra: "D", totalDias: 0, xFecha: 3 },
+                    { letra: "E", totalDias: 0, xFecha: 3 },
+                    { letra: "F", totalDias: 0, xFecha: 3 },
+                    { letra: "G", totalDias: 0, xFecha: 3 },
+                    { letra: "H", totalDias: 0, xFecha: 3 }
+                ],
+                promedio: 33
+            },
+            13: {
+                nombre: "Territorio 13",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 3 },
+                    { letra: "B", totalDias: 0, xFecha: 3 },
+                    { letra: "C", totalDias: 0, xFecha: 3 },
+                    { letra: "D", totalDias: 0, xFecha: 3 },
+                    { letra: "E", totalDias: 0, xFecha: 3 },
+                    { letra: "F", totalDias: 0, xFecha: 2 }
+                ],
+                promedio: 25
+            },
+            14: {
+                nombre: "Territorio 14",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 3 },
+                    { letra: "D", totalDias: 0, xFecha: 6 },
+                    { letra: "E", totalDias: 0, xFecha: 4 }
+                ],
+                promedio: 33
+            },
+            15: {
+                nombre: "Territorio 15",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 0, xFecha: 5 },
+                    { letra: "E", totalDias: 0, xFecha: 5 },
+                    { letra: "F", totalDias: 0, xFecha: 4 },
+                    { letra: "G", totalDias: 3, xFecha: 3 },
+                    { letra: "H", totalDias: 3, xFecha: 3 },
+                    { letra: "I", totalDias: 3, xFecha: 3 },
+                    { letra: "J", totalDias: 3, xFecha: 3 },
+                    { letra: "K", totalDias: 3, xFecha: 3 },
+                    { letra: "L", totalDias: 3, xFecha: 3 },
+                    { letra: "M", totalDias: 3, xFecha: 3 }
+                ],
+                promedio: 29
+            },
+            16: {
+                nombre: "Territorio 16",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 0, xFecha: 6 },
+                    { letra: "E", totalDias: 0, xFecha: 6 }
+                ],
+                promedio: 36
+            },
+            17: {
+                nombre: "Territorio 17",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 5 },
+                    { letra: "D", totalDias: 0, xFecha: 5 },
+                    { letra: "E", totalDias: 0, xFecha: 5 },
+                    { letra: "F", totalDias: 0, xFecha: 5 },
+                    { letra: "G", totalDias: 0, xFecha: 4 },
+                    { letra: "H", totalDias: 0, xFecha: 4 },
+                    { letra: "I", totalDias: 0, xFecha: 4 },
+                    { letra: "J", totalDias: 0, xFecha: 4 },
+                    { letra: "K", totalDias: 0, xFecha: 6 },
+                    { letra: "L", totalDias: 0, xFecha: 6 },
+                    { letra: "M", totalDias: 0, xFecha: 5 },
+                    { letra: "N", totalDias: 0, xFecha: 5 },
+                    { letra: "Ñ", totalDias: 0, xFecha: 6 },
+                    { letra: "O", totalDias: 0, xFecha: 6 },
+                    { letra: "P", totalDias: 0, xFecha: 6 },
+                    { letra: "Q", totalDias: 0, xFecha: 5 }
+                ],
+                promedio: 21
+            },
+            18: {
+                nombre: "Territorio 18",
+                letras: [
+                    { letra: "A", totalDias: 23, xFecha: 5 },
+                    { letra: "B", totalDias: 23, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 23, xFecha: 6 },
+                    { letra: "E", totalDias: 23, xFecha: 6 },
+                    { letra: "F", totalDias: 23, xFecha: 6 }
+                ],
+                promedio: 26
+            },
+            19: {
+                nombre: "Territorio 19",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 7 },
+                    { letra: "B", totalDias: 0, xFecha: 7 },
+                    { letra: "C", totalDias: 0, xFecha: 7 },
+                    { letra: "D", totalDias: 0, xFecha: 7 },
+                    { letra: "E", totalDias: 0, xFecha: 5 },
+                    { letra: "F", totalDias: 0, xFecha: 5 }
+                ],
+                promedio: 24
+            },
+            20: {
+                nombre: "Territorio 20",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 5 },
+                    { letra: "B", totalDias: 0, xFecha: 8 },
+                    { letra: "C", totalDias: 0, xFecha: 8 },
+                    { letra: "D", totalDias: 0, xFecha: 7 },
+                    { letra: "E", totalDias: 0, xFecha: 7 },
+                    { letra: "F", totalDias: 0, xFecha: 7 },
+                    { letra: "G", totalDias: 0, xFecha: 7 },
+                    { letra: "H", totalDias: 0, xFecha: 6 },
+                    { letra: "I", totalDias: 0, xFecha: 6 },
+                    { letra: "J", totalDias: 0, xFecha: 7 },
+                    { letra: "K", totalDias: 0, xFecha: 7 },
+                    { letra: "L", totalDias: 13, xFecha: 7 },
+                    { letra: "M", totalDias: 0, xFecha: 7 },
+                    { letra: "N", totalDias: 0, xFecha: 6 },
+                    { letra: "O", totalDias: 0, xFecha: 6 },
+                    { letra: "P", totalDias: 0, xFecha: 6 },
+                    { letra: "Q", totalDias: 13, xFecha: 4 },
+                    { letra: "R", totalDias: 13, xFecha: 4 }
+                ],
+                promedio: 0
+            },
+            21: {
+                nombre: "Territorio 21",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 4 },
+                    { letra: "B", totalDias: 0, xFecha: 5 },
+                    { letra: "C", totalDias: 0, xFecha: 3 },
+                    { letra: "D", totalDias: 0, xFecha: 3 },
+                    { letra: "E", totalDias: 0, xFecha: 3 },
+                    { letra: "F", totalDias: 0, xFecha: 3 },
+                    { letra: "G", totalDias: 0, xFecha: 4 },
+                    { letra: "H", totalDias: 0, xFecha: 4 },
+                    { letra: "I", totalDias: 0, xFecha: 4 },
+                    { letra: "J", totalDias: 0, xFecha: 4 }
+                ],
+                promedio: 37
+            },
+            22: {
+                nombre: "Territorio 22",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 3 },
+                    { letra: "B", totalDias: 0, xFecha: 3 },
+                    { letra: "C", totalDias: 0, xFecha: 3 },
+                    { letra: "D", totalDias: 0, xFecha: 3 },
+                    { letra: "E", totalDias: 0, xFecha: 3 },
+                    { letra: "F", totalDias: 0, xFecha: 2 },
+                    { letra: "G", totalDias: 0, xFecha: 2 },
+                    { letra: "H", totalDias: 0, xFecha: 2 },
+                    { letra: "I", totalDias: 0, xFecha: 2 },
+                    { letra: "J", totalDias: 0, xFecha: 2 }
+                ],
+                promedio: 55
+            },
+            23: {
+                nombre: "Territorio 23",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 2 },
+                    { letra: "B", totalDias: 0, xFecha: 2 },
+                    { letra: "C", totalDias: 0, xFecha: 2 },
+                    { letra: "D", totalDias: 0, xFecha: 2 },
+                    { letra: "E", totalDias: 0, xFecha: 2 },
+                    { letra: "F", totalDias: 0, xFecha: 2 },
+                    { letra: "G", totalDias: 0, xFecha: 2 },
+                    { letra: "H", totalDias: 0, xFecha: 1 },
+                    { letra: "I", totalDias: 0, xFecha: 1 }
+                ],
+                promedio: 28
+            },
+            24: {
+                nombre: "Territorio 24",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 0, xFecha: 6 },
+                    { letra: "E", totalDias: 0, xFecha: 6 },
+                    { letra: "F", totalDias: 0, xFecha: 6 },
+                    { letra: "G", totalDias: 0, xFecha: 6 },
+                    { letra: "H", totalDias: 0, xFecha: 7 },
+                    { letra: "I", totalDias: 0, xFecha: 7 },
+                    { letra: "J", totalDias: 0, xFecha: 7 },
+                    { letra: "K", totalDias: 0, xFecha: 7 },
+                    { letra: "L", totalDias: 0, xFecha: 7 },
+                    { letra: "M", totalDias: 0, xFecha: 6 },
+                    { letra: "N", totalDias: 0, xFecha: 5 },
+                    { letra: "Ñ", totalDias: 0, xFecha: 5 },
+                    { letra: "O", totalDias: 0, xFecha: 4 },
+                    { letra: "P", totalDias: 0, xFecha: 5 },
+                    { letra: "Q", totalDias: 16, xFecha: 4 },
+                    { letra: "R", totalDias: 16, xFecha: 4 }
+                ],
+                promedio: 15
+            },
+            25: {
+                nombre: "Territorio 25",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 3 },
+                    { letra: "B", totalDias: 0, xFecha: 3 },
+                    { letra: "C", totalDias: 0, xFecha: 3 },
+                    { letra: "D", totalDias: 0, xFecha: 3 },
+                    { letra: "E", totalDias: 0, xFecha: 3 },
+                    { letra: "F", totalDias: 0, xFecha: 2 },
+                    { letra: "G", totalDias: 0, xFecha: 2 },
+                    { letra: "H", totalDias: 0, xFecha: 2 },
+                    { letra: "I", totalDias: 0, xFecha: 2 },
+                    { letra: "J", totalDias: 0, xFecha: 2 },
+                    { letra: "K", totalDias: 0, xFecha: 2 },
+                    { letra: "L", totalDias: 0, xFecha: 2 },
+                    { letra: "M", totalDias: 0, xFecha: 2 },
+                    { letra: "N", totalDias: 0, xFecha: 2 },
+                    { letra: "Ñ", totalDias: 0, xFecha: 2 },
+                    { letra: "O", totalDias: 0, xFecha: 2 },
+                    { letra: "P", totalDias: 0, xFecha: 2 },
+                    { letra: "Q", totalDias: 0, xFecha: 2 },
+                    { letra: "R", totalDias: 0, xFecha: 2 }
+                ],
+                promedio: 43
+            },
+            26: {
+                nombre: "Territorio 26",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 2 },
+                    { letra: "B", totalDias: 0, xFecha: 2 },
+                    { letra: "C", totalDias: 0, xFecha: 2 },
+                    { letra: "D", totalDias: 0, xFecha: 2 },
+                    { letra: "E", totalDias: 0, xFecha: 2 },
+                    { letra: "F", totalDias: 0, xFecha: 2 },
+                    { letra: "G", totalDias: 0, xFecha: 2 },
+                    { letra: "H", totalDias: 0, xFecha: 2 },
+                    { letra: "I", totalDias: 0, xFecha: 2 },
+                    { letra: "J", totalDias: 0, xFecha: 4 },
+                    { letra: "K", totalDias: 0, xFecha: 4 },
+                    { letra: "L", totalDias: 0, xFecha: 3 },
+                    { letra: "M", totalDias: 0, xFecha: 3 },
+                    { letra: "N", totalDias: 0, xFecha: 3 },
+                    { letra: "Ñ", totalDias: 0, xFecha: 2 },
+                    { letra: "O", totalDias: 0, xFecha: 2 }
+                ],
+                promedio: 21
+            },
+             27: {
+                nombre: "Territorio 27",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 0, xFecha: 6 },
+                    { letra: "E", totalDias: 0, xFecha: 6 },
+                    { letra: "F", totalDias: 0, xFecha: 6 },
+                    { letra: "G", totalDias: 0, xFecha: 6 },
+                    { letra: "H", totalDias: 0, xFecha: 6 },
+                    { letra: "I", totalDias: 0, xFecha: 6 },
+                    { letra: "J", totalDias: 0, xFecha: 6 },
+                    { letra: "K", totalDias: 0, xFecha: 6 },
+                    { letra: "L", totalDias: 0, xFecha: 6 },
+                    { letra: "M", totalDias: 0, xFecha: 6 },
+                    { letra: "N", totalDias: 0, xFecha: 6 },
+                    { letra: "Ñ", totalDias: 0, xFecha: 4 },
+                    { letra: "O", totalDias: 0, xFecha: 5 },
+                    { letra: "P", totalDias: 0, xFecha: 4 },
+                    { letra: "Q", totalDias: 0, xFecha: 5 },
+                    { letra: "R", totalDias: 0, xFecha: 5 },
+                    { letra: "S", totalDias: 0, xFecha: 5 },
+                    { letra: "T", totalDias: 0, xFecha: 4 },
+                    { letra: "U", totalDias: 0, xFecha: 5 },
+                    { letra: "V", totalDias: 0, xFecha: 4 },
+                    { letra: "W", totalDias: 0, xFecha: 4 },
+                    { letra: "X", totalDias: 0, xFecha: 4 },
+                    { letra: "Y", totalDias: 0, xFecha: 4 },
+                    { letra: "Z", totalDias: 0, xFecha: 4 }
+                ],
+                promedio: 21
+            },
+            28: {
+                nombre: "Territorio 28",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 5 },
+                    { letra: "B", totalDias: 0, xFecha: 3 },
+                    { letra: "C", totalDias: 0, xFecha: 3 },
+                    { letra: "D", totalDias: 0, xFecha: 3 },
+                    { letra: "E", totalDias: 0, xFecha: 3 },
+                    { letra: "F", totalDias: 0, xFecha: 3 },
+                    { letra: "G", totalDias: 0, xFecha: 3 },
+                    { letra: "H", totalDias: 0, xFecha: 2 },
+                    { letra: "I", totalDias: 0, xFecha: 2 },
+                    { letra: "J", totalDias: 0, xFecha: 1 },
+                    { letra: "K", totalDias: 0, xFecha: 0 },
+                    { letra: "L", totalDias: 0, xFecha: 0 },
+                    { letra: "M", totalDias: 0, xFecha: 0 },
+                    { letra: "N", totalDias: 0, xFecha: 0 },
+                    { letra: "Ñ", totalDias: 0, xFecha: 0 },
+                    { letra: "O", totalDias: 0, xFecha: 0 },
+                    { letra: "P", totalDias: 0, xFecha: 0 },
+                    { letra: "Q", totalDias: 0, xFecha: 0 },
+                    { letra: "R", totalDias: 0, xFecha: 0 },
+                    { letra: "S", totalDias: 0, xFecha: 0 },
+                    { letra: "T", totalDias: 0, xFecha: 0 },
+                    { letra: "U", totalDias: 0, xFecha: 0 },
+                    { letra: "V", totalDias: 0, xFecha: 0 },
+                    { letra: "W", totalDias: 0, xFecha: 0 },
+                    { letra: "X", totalDias: 0, xFecha: 0 },
+                    { letra: "Y", totalDias: 0, xFecha: 0 },
+                    { letra: "Z", totalDias: 0, xFecha: 0 }
+                ],
+                promedio: 37
+            },
+            29: {
+                nombre: "Territorio 29",
+                letras: [
+                    { letra: "A", totalDias: 5, xFecha: 0 },
+                    { letra: "B", totalDias: 5, xFecha: 0 },
+                    { letra: "C", totalDias: 5, xFecha: 0 },
+                    { letra: "D", totalDias: 5, xFecha: 0 },
+                    { letra: "E", totalDias: 5, xFecha: 0 },
+                    { letra: "F", totalDias: 4, xFecha: 0 },
+                    { letra: "G", totalDias: 4, xFecha: 0 },
+                    { letra: "H", totalDias: 3, xFecha: 11 },
+                    { letra: "I", totalDias: 3, xFecha: 11 },
+                    { letra: "J", totalDias: 3, xFecha: 11 },
+                    { letra: "K", totalDias: 3, xFecha: 11 },
+                    { letra: "L", totalDias: 2, xFecha: 11 },
+                    { letra: "M", totalDias: 3, xFecha: 0 },
+                    { letra: "N", totalDias: 3, xFecha: 0 },
+                    { letra: "Ñ", totalDias: 3, xFecha: 0 },
+                    { letra: "O", totalDias: 3, xFecha: 0 },
+                    { letra: "P", totalDias: 3, xFecha: 0 },
+                    { letra: "Q", totalDias: 3, xFecha: 0 },
+                    { letra: "R", totalDias: 0, xFecha: 0 },
+                    { letra: "S", totalDias: 0, xFecha: 0 },
+                    { letra: "T", totalDias: 0, xFecha: 0 },
+                    { letra: "U", totalDias: 0, xFecha: 0 },
+                    { letra: "V", totalDias: 0, xFecha: 0 },
+                    { letra: "W", totalDias: 0, xFecha: 0 },
+                    { letra: "X", totalDias: 0, xFecha: 0 },
+                    { letra: "Y", totalDias: 0, xFecha: 0 },
+                    { letra: "Z", totalDias: 0, xFecha: 0 }
+                ],
+                promedio: 28
+            },
+            30: {
+                nombre: "Territorio 30",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 6 },
+                    { letra: "D", totalDias: 7, xFecha: 5 },
+                    { letra: "E", totalDias: 7, xFecha: 4 },
+                    { letra: "F", totalDias: 7, xFecha: 4 },
+                    { letra: "G", totalDias: 7, xFecha: 4 },
+                    { letra: "H", totalDias: 7, xFecha: 4 },
+                    { letra: "I", totalDias: 7, xFecha: 4 },
+                    { letra: "J", totalDias: 7, xFecha: 4 },
+                    { letra: "K", totalDias: 7, xFecha: 2 },
+                    { letra: "L", totalDias: 0, xFecha: 0 },
+                    { letra: "M", totalDias: 0, xFecha: 0 },
+                    { letra: "N", totalDias: 0, xFecha: 0 },
+                    { letra: "Ñ", totalDias: 0, xFecha: 0 },
+                    { letra: "O", totalDias: 0, xFecha: 0 },
+                    { letra: "P", totalDias: 0, xFecha: 0 },
+                    { letra: "Q", totalDias: 0, xFecha: 0 },
+                    { letra: "R", totalDias: 0, xFecha: 0 },
+                    { letra: "S", totalDias: 0, xFecha: 0 },
+                    { letra: "T", totalDias: 0, xFecha: 0 },
+                    { letra: "U", totalDias: 0, xFecha: 0 },
+                    { letra: "V", totalDias: 0, xFecha: 0 },
+                    { letra: "W", totalDias: 0, xFecha: 0 },
+                    { letra: "X", totalDias: 0, xFecha: 0 },
+                    { letra: "Y", totalDias: 0, xFecha: 0 },
+                    { letra: "Z", totalDias: 0, xFecha: 0 }
+                ],
+                promedio: 0
+            },
+            31: {
+                nombre: "Territorio 31",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 6 },
+                    { letra: "B", totalDias: 6, xFecha: 5 }
+                ],
+                promedio: 37
+            },
+            32: {
+                nombre: "Territorio 32",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 4 },
+                    { letra: "B", totalDias: 0, xFecha: 4 },
+                    { letra: "C", totalDias: 0, xFecha: 4 }
+                ],
+                promedio: 45
+            },
+            33: {
+                nombre: "Territorio 33",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 8 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 4, xFecha: 5 },
+                    { letra: "D", totalDias: 4, xFecha: 5 },
+                    { letra: "E", totalDias: 4, xFecha: 5 },
+                    { letra: "F", totalDias: 4, xFecha: 6 }
+                ],
+                promedio: 18
+            },
+            34: {
+                nombre: "Territorio 34",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 8 },
+                    { letra: "B", totalDias: 0, xFecha: 7 },
+                    { letra: "C", totalDias: 0, xFecha: 7 },
+                    { letra: "D", totalDias: 0, xFecha: 7 },
+                    { letra: "E", totalDias: 0, xFecha: 7 },
+                    { letra: "F", totalDias: 0, xFecha: 7 },
+                    { letra: "G", totalDias: 0, xFecha: 7 },
+                    { letra: "H", totalDias: 0, xFecha: 7 },
+                    { letra: "I", totalDias: 0, xFecha: 7 },
+                    { letra: "J", totalDias: 0, xFecha: 7 },
+                    { letra: "K", totalDias: 0, xFecha: 7 },
+                    { letra: "L", totalDias: 0, xFecha: 7 },
+                    { letra: "M", totalDias: 0, xFecha: 7 },
+                    { letra: "N", totalDias: 0, xFecha: 7 },
+                    { letra: "Ñ", totalDias: 0, xFecha: 7 },
+                    { letra: "O", totalDias: 0, xFecha: 7 },
+                    { letra: "P", totalDias: 0, xFecha: 7 },
+                    { letra: "Q", totalDias: 0, xFecha: 8 },
+                    { letra: "R", totalDias: 0, xFecha: 7 },
+                    { letra: "S", totalDias: 0, xFecha: 7 },
+                    { letra: "T", totalDias: 0, xFecha: 6 },
+                    { letra: "U", totalDias: 0, xFecha: 6 },
+                    { letra: "V", totalDias: 0, xFecha: 6 },
+                    { letra: "W", totalDias: 0, xFecha: 6 },
+                    { letra: "X", totalDias: 0, xFecha: 6 },
+                    { letra: "Y", totalDias: 0, xFecha: 6 },
+                    { letra: "Z", totalDias: 0, xFecha: 6 }
+                ],
+                promedio: 14
+            },
+            35: {
+                nombre: "Territorio 35",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 5 },
+                    { letra: "B", totalDias: 0, xFecha: 7 },
+                    { letra: "C", totalDias: 0, xFecha: 7 },
+                    { letra: "D", totalDias: 0, xFecha: 5 },
+                    { letra: "E", totalDias: 0, xFecha: 5 }
+                ],
+                promedio: 25
+            },
+            36: {
+                nombre: "Territorio 36",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 7 },
+                    { letra: "B", totalDias: 0, xFecha: 6 },
+                    { letra: "C", totalDias: 0, xFecha: 4 },
+                    { letra: "D", totalDias: 0, xFecha: 4 },
+                    { letra: "E", totalDias: 0, xFecha: 4 },
+                    { letra: "F", totalDias: 0, xFecha: 4 },
+                    { letra: "G", totalDias: 0, xFecha: 4 }
+                ],
+                promedio: 24
+            },
+            37: {
+                nombre: "Territorio 37",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 7 },
+                    { letra: "B", totalDias: 0, xFecha: 8 },
+                    { letra: "C", totalDias: 0, xFecha: 8 },
+                    { letra: "D", totalDias: 0, xFecha: 8 },
+                    { letra: "E", totalDias: 0, xFecha: 8 },
+                    { letra: "F", totalDias: 0, xFecha: 7 },
+                    { letra: "G", totalDias: 0, xFecha: 8 },
+                    { letra: "H", totalDias: 0, xFecha: 8 },
+                    { letra: "I", totalDias: 0, xFecha: 8 },
+                    { letra: "J", totalDias: 0, xFecha: 8 },
+                    { letra: "K", totalDias: 0, xFecha: 7 },
+                    { letra: "L", totalDias: 0, xFecha: 6 },
+                    { letra: "M", totalDias: 0, xFecha: 6 },
+                    { letra: "N", totalDias: 0, xFecha: 6 }
+                ],
+                promedio: 19
+            },
+            38: {
+                nombre: "Territorio 38",
+                letras: [
+                    { letra: "A", totalDias: 5, xFecha: 5 },
+                    { letra: "B", totalDias: 0, xFecha: 5 },
+                    { letra: "C", totalDias: 5, xFecha: 6 },
+                    { letra: "D", totalDias: 5, xFecha: 4 },
+                    { letra: "E", totalDias: 0, xFecha: 8 },
+                    { letra: "F", totalDias: 0, xFecha: 7 }
+                ],
+                promedio: 15
+            },
+            39: {
+                nombre: "Territorio 39",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 5 },
+                    { letra: "B", totalDias: 0, xFecha: 3 },
+                    { letra: "C", totalDias: 0, xFecha: 3 },
+                    { letra: "D", totalDias: 0, xFecha: 4 },
+                    { letra: "E", totalDias: 0, xFecha: 3 },
+                    { letra: "F", totalDias: 9, xFecha: 2 }
+                ],
+                promedio: 29
+            },
+            40: {
+                nombre: "Territorio 40",
+                letras: [
+                    { letra: "A", totalDias: 37, xFecha: 7 },
+                    { letra: "B", totalDias: 0, xFecha: 3 }
+                ],
+                promedio: 25
+            },
+            41: {
+                nombre: "Territorio 41",
+                letras: [
+                    { letra: "A", totalDias: 0, xFecha: 7 },
+                    { letra: "B", totalDias: 0, xFecha: 6 }
+                ],
+                promedio: 23
+            },
+                    
+
+        };
+
+        function openModal(territorioId = 1) {
+            const data = territoriosData[territorioId];
+            if (!data) {
+                alert('No hay datos para el Territorio ' + territorioId);
+                return;
+            }
+
+            // Actualizar título con T.X
+            document.getElementById('modalTitle').textContent = `T.${territorioId} - ${data.nombre}`;
+
+            // Actualizar tabla
+            const tbody = document.querySelector('.territory-table tbody');
+            tbody.innerHTML = '';
+
+            data.letras.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                const tooltipDias = item.totalDias > 0 
+                    ? `${item.totalDias} días de atraso sin trabajar` 
+                    : 'Sin atraso';
+                const tooltipFecha = `Se ha trabajado ${item.xFecha} ${item.xFecha === 1 ? 'vez' : 'veces'} en el año`;
+                
+                if (index === 0) {
+                    tr.innerHTML = `
+                        <td rowspan="${data.letras.length}" style="font-size: 1.5em; font-weight: bold;">T.${territorioId}</td>
+                        <td>${item.letra}</td>
+                        <td class="dias-cell" data-tooltip="${tooltipDias}">${item.totalDias}</td>
+                        <td class="fecha-cell" data-tooltip="${tooltipFecha}">${item.xFecha}</td>
+                        <td rowspan="${data.letras.length}" class="promedio-cell">${data.promedio}</td>
+                    `;
+                } else {
+                    tr.innerHTML = `
+                        <td>${item.letra}</td>
+                        <td class="dias-cell" data-tooltip="${tooltipDias}">${item.totalDias}</td>
+                        <td class="fecha-cell" data-tooltip="${tooltipFecha}">${item.xFecha}</td>
+                    `;
+                }
+                
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('territoryModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('territoryModal').classList.remove('active');
+        }
+
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('territoryModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Funciones del menú de estadísticas
+        function mostrarEstadisticas() {
+            // Calcular estadísticas
+            let totalTerritorios = Object.keys(territoriosData).length;
+            let totalLetras = 0;
+            let totalDiasAtraso = 0;
+            let totalVecesTrabajadas = 0;
+            let promedioTotal = 0;
+            let territoriosConAtraso = 0;
+            
+            const detalleTerritorios = [];
+
+            Object.entries(territoriosData).forEach(([id, territorio]) => {
+                let letras = territorio.letras.length;
+                let diasAtraso = territorio.letras.reduce((sum, l) => sum + l.totalDias, 0);
+                let vecesTrabajadas = territorio.letras.reduce((sum, l) => sum + l.xFecha, 0);
+                
+                totalLetras += letras;
+                totalDiasAtraso += diasAtraso;
+                totalVecesTrabajadas += vecesTrabajadas;
+                promedioTotal += territorio.promedio;
+                
+                if (diasAtraso > 0) territoriosConAtraso++;
+
+                detalleTerritorios.push({
+                    id: id,
+                    nombre: territorio.nombre,
+                    letras: letras,
+                    diasAtraso: diasAtraso,
+                    vecesTrabajadas: vecesTrabajadas,
+                    promedio: territorio.promedio
+                });
+            });
+
+            const promedioGeneral = Math.round(promedioTotal / totalTerritorios);
+
+            // Generar HTML de estadísticas
+            const statsHTML = `
+                <div class="stats-grid">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h4>Total Territorios</h4>
+                        <div class="value">${totalTerritorios}</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h4>Total Letras</h4>
+                        <div class="value">${totalLetras}</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <h4>Veces Trabajadas</h4>
+                        <div class="value">${totalVecesTrabajadas}</div>
+                        <small style="display:block; margin-top:4px; opacity:0.85;">Cantidad de veces que se ha trabajado la letra en el año</small>
+                        <button onclick="mostrarDetalleVecesModal()" style="margin-top:8px; padding:6px 10px; border:none; border-radius:6px; background:#ffffff; color:#2c3e50; cursor:pointer;">Ver detalle por letra</button>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <h4>Promedio General</h4>
+                        <div class="value">${promedioGeneral}</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <h4>Total Días Atraso</h4>
+                        <div class="value">${totalDiasAtraso}</div>
+                        <small style="display:block; margin-top:4px; opacity:0.85;">Suma de días de atraso acumulados por letras</small>
+                        <button onclick="mostrarDetalleAtrasoModal()" style="margin-top:8px; padding:6px 10px; border:none; border-radius:6px; background:#ffffff; color:#2c3e50; cursor:pointer;">Ver detalle de atraso</button>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                        <h4>Territorios con Atraso</h4>
+                        <div class="value">${territoriosConAtraso}</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px; color: #2c3e50;">Detalle por Territorio</h3>
+                <p style="color:#7f8c8d; margin: 6px 0 12px 0; font-size: 0.9em;">“Veces Trabajadas” indica cuántas veces se ha trabajado cada letra durante el año.</p>
+                <table class="stats-table">
+                    <thead>
+                        <tr>
+                            <th>Territorio</th>
+                            <th>Letras</th>
+                            <th>Días Atraso</th>
+                            <th>Veces Trabajadas</th>
+                            <th>Promedio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${detalleTerritorios.map(t => `
+                            <tr>
+                                <td><strong>${t.nombre}</strong></td>
+                                <td>${t.letras}</td>
+                                <td>${t.diasAtraso}</td>
+                                <td>${t.vecesTrabajadas}</td>
+                                <td><strong>${t.promedio}</strong></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                
+            `;
+
+            document.getElementById('statsContainer').innerHTML = statsHTML;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        function mostrarDetalleVecesModal(){
+            let html = `
+                <div class="modal-header">
+                    <h2>🧾 Detalle de Veces por Letra</h2>
+                    <button class="close-btn" onclick="closeStatsModal()">✕</button>
+                </div>
+            `;
+            html += '<div style="max-height:70vh; overflow:auto; padding: 8px 0;">';
+            html += `${Object.entries(territoriosData).map(([id, territorio]) => {
+                const filas = territorio.letras.map(l => `<tr><td><strong>${l.letra}</strong></td><td style=\"text-align:center\">${l.xFecha}</td></tr>`).join('');
+                return `
+                <div style="background:#ffffff; border:1px solid #ddd; border-radius:8px; margin-bottom:14px; overflow:hidden;">
+                    <div style="background:#ecf0f1; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="this.nextElementSibling.style.display = (this.nextElementSibling.style.display==='none'?'block':'none')">
+                        <div><strong>${territorio.nombre}</strong> <span style="color:#7f8c8d">(T.${id})</span></div>
+                        <div style="color:#7f8c8d; font-size:0.9em;">Letras: ${territorio.letras.length}</div>
+                    </div>
+                    <div style="display:none; padding:10px 12px;">
+                        <table style="width:100%; border-collapse:collapse;">
+                            <thead>
+                                <tr style="background:#3498db; color:white;">
+                                    <th style="padding:6px; text-align:left;">Letra</th>
+                                    <th style="padding:6px; text-align:center;">Veces Trabajadas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filas}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+            }).join('')}`;
+            html += '</div>';
+            const container = document.getElementById('statsContainer');
+            container.innerHTML = html;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        function mostrarDetalleAtrasoModal(){
+            let html = `
+                <div class="modal-header">
+                    <h2>⏰ Detalle de Días de Atraso por Letra</h2>
+                    <button class="close-btn" onclick="closeStatsModal()">✕</button>
+                </div>
+            `;
+            html += '<div style="max-height:70vh; overflow:auto; padding: 8px 0;">';
+            html += `${Object.entries(territoriosData).map(([id, territorio]) => {
+                const filas = territorio.letras.map(l => `<tr><td><strong>${l.letra}</strong></td><td style=\"text-align:center\">${l.totalDias}</td></tr>`).join('');
+                const totalTerrAtraso = territorio.letras.reduce((s,l)=> s + (l.totalDias||0), 0);
+                return `
+                <div style="background:#ffffff; border:1px solid #ddd; border-radius:8px; margin-bottom:14px; overflow:hidden;">
+                    <div style="background:#ecf0f1; padding:10px 12px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="this.nextElementSibling.style.display = (this.nextElementSibling.style.display==='none'?'block':'none')">
+                        <div><strong>${territorio.nombre}</strong> <span style="color:#7f8c8d">(T.${id})</span></div>
+                        <div style="color:#7f8c8d; font-size:0.9em;">Atraso total: ${totalTerrAtraso} días</div>
+                    </div>
+                    <div style="display:none; padding:10px 12px;">
+                        <table style="width:100%; border-collapse:collapse;">
+                            <thead>
+                                <tr style="background:#e74c3c; color:white;">
+                                    <th style="padding:6px; text-align:left;">Letra</th>
+                                    <th style="padding:6px; text-align:center;">Días de atraso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${filas}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
+            }).join('')}`;
+            html += '</div>';
+            const container = document.getElementById('statsContainer');
+            container.innerHTML = html;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        function closeStatsModal() {
+            document.getElementById('statsModal').classList.remove('active');
+        }
+
+        function mostrarResumen() {
+            // Calcular estadísticas detalladas
+            let totalTerritorios = Object.keys(territoriosData).length;
+            let totalLetras = 0;
+            let totalDiasAtraso = 0;
+            let totalVecesTrabajadas = 0;
+            let promedioTotal = 0;
+            
+            let territorioMasTrabajado = { nombre: '', veces: 0 };
+            let territorioMenosTrabajado = { nombre: '', veces: Infinity };
+            let territorioMayorAtraso = { nombre: '', dias: 0 };
+            let territorioMejorPromedio = { nombre: '', promedio: 0 };
+            let territorioMasLetras = { nombre: '', letras: 0 };
+
+            Object.entries(territoriosData).forEach(([id, territorio]) => {
+                let letras = territorio.letras.length;
+                let diasAtraso = territorio.letras.reduce((sum, l) => sum + l.totalDias, 0);
+                let vecesTrabajadas = territorio.letras.reduce((sum, l) => sum + l.xFecha, 0);
+                
+                totalLetras += letras;
+                totalDiasAtraso += diasAtraso;
+                totalVecesTrabajadas += vecesTrabajadas;
+                promedioTotal += territorio.promedio;
+
+                // Territorio más trabajado
+                if (vecesTrabajadas > territorioMasTrabajado.veces) {
+                    territorioMasTrabajado = { nombre: territorio.nombre, veces: vecesTrabajadas };
+                }
+
+                // Territorio menos trabajado
+                if (vecesTrabajadas < territorioMenosTrabajado.veces) {
+                    territorioMenosTrabajado = { nombre: territorio.nombre, veces: vecesTrabajadas };
+                }
+
+                // Territorio con mayor atraso
+                if (diasAtraso > territorioMayorAtraso.dias) {
+                    territorioMayorAtraso = { nombre: territorio.nombre, dias: diasAtraso };
+                }
+
+                // Territorio con mejor promedio
+                if (territorio.promedio > territorioMejorPromedio.promedio) {
+                    territorioMejorPromedio = { nombre: territorio.nombre, promedio: territorio.promedio };
+                }
+
+                // Territorio con más letras
+                if (letras > territorioMasLetras.letras) {
+                    territorioMasLetras = { nombre: territorio.nombre, letras: letras };
+                }
+            });
+
+            const promedioGeneral = Math.round(promedioTotal / totalTerritorios);
+            const promedioLetras = (totalLetras / totalTerritorios).toFixed(1);
+            const promedioVecesTrabajadas = (totalVecesTrabajadas / totalTerritorios).toFixed(1);
+
+            // Generar HTML del resumen
+            const resumenHTML = `
+                <h3 style="color: #2c3e50; margin-bottom: 20px;">📋 Resumen Ejecutivo</h3>
+                
+                <div style="background: #ecf0f1; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <p style="font-size: 1.1em; line-height: 1.8; color: #2c3e50;">
+                        La Congregación Loncomilla gestiona actualmente <strong>${totalTerritorios} territorios</strong> 
+                        que comprenden un total de <strong>${totalLetras} letras</strong>. 
+                        En promedio, cada territorio tiene <strong>${promedioLetras} letras</strong>.
+                    </p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <h4>🏆 Más Trabajado</h4>
+                        <div style="font-size: 1.2em; margin: 10px 0;">${territorioMasTrabajado.nombre}</div>
+                        <div class="value">${territorioMasTrabajado.veces}</div>
+                        <small>veces en el año</small>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h4>⚠️ Menos Trabajado</h4>
+                        <div style="font-size: 1.2em; margin: 10px 0;">${territorioMenosTrabajado.nombre}</div>
+                        <div class="value">${territorioMenosTrabajado.veces}</div>
+                        <small>veces en el año</small>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <h4>⏰ Mayor Atraso</h4>
+                        <div style="font-size: 1.2em; margin: 10px 0;">${territorioMayorAtraso.nombre}</div>
+                        <div class="value">${territorioMayorAtraso.dias}</div>
+                        <small>días acumulados</small>
+                    </div>
+                </div>
+
+                <div class="stats-grid" style="margin-top: 20px;">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <h4>⭐ Mejor Promedio</h4>
+                        <div style="font-size: 1.2em; margin: 10px 0;">${territorioMejorPromedio.nombre}</div>
+                        <div class="value">${territorioMejorPromedio.promedio}</div>
+                        <small>días promedio</small>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <h4>📝 Más Letras</h4>
+                        <div style="font-size: 1.2em; margin: 10px 0;">${territorioMasLetras.nombre}</div>
+                        <div class="value">${territorioMasLetras.letras}</div>
+                        <small>letras totales</small>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">
+                        <h4>📊 Promedio General</h4>
+                        <div style="font-size: 1.2em; margin: 10px 0;">Todos los Territorios</div>
+                        <div class="value">${promedioGeneral}</div>
+                        <small>días promedio</small>
+                    </div>
+                </div>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">📈 Análisis General</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 5px solid #3498db;">
+                    <ul style="line-height: 2; color: #2c3e50; list-style: none; padding: 0;">
+                        <li>✓ <strong>Total de veces trabajadas en el año:</strong> ${totalVecesTrabajadas}</li>
+                        <li>✓ <strong>Promedio de veces trabajadas por territorio:</strong> ${promedioVecesTrabajadas}</li>
+                        <li>✓ <strong>Total de días de atraso acumulados:</strong> ${totalDiasAtraso} días</li>
+                        <li>✓ <strong>Promedio de días de atraso:</strong> ${(totalDiasAtraso / totalTerritorios).toFixed(1)} días por territorio</li>
+                        <li>✓ <strong>Cobertura total:</strong> ${totalLetras} letras en ${totalTerritorios} territorios</li>
+                    </ul>
+                </div>
+
+                <h3 style="color: #2c3e50; margin-top: 30px; margin-bottom: 15px;">💡 Recomendaciones</h3>
+                <div style="background: #fff3cd; padding: 20px; border-radius: 10px; border-left: 5px solid #f39c12;">
+                    <ul style="line-height: 2; color: #856404; list-style: none; padding: 0;">
+                        <li>⚡ Priorizar el territorio <strong>${territorioMenosTrabajado.nombre}</strong> que ha sido el menos trabajado</li>
+                        <li>⚡ Atender el atraso de <strong>${territorioMayorAtraso.dias} días</strong> en ${territorioMayorAtraso.nombre}</li>
+                        <li>⚡ Mantener el buen ritmo de trabajo en <strong>${territorioMasTrabajado.nombre}</strong></li>
+                        <li>⚡ Objetivo: Reducir el promedio general a menos de ${promedioGeneral - 5} días</li>
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('statsContainer').innerHTML = resumenHTML;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        function mostrarGraficos() {
+            let graficosHTML = '<h3 style="color: #2c3e50; margin-bottom: 12px;">📊 Gráficos por Territorio</h3>';
+            graficosHTML += '<p style="color:#7f8c8d; margin: 0 0 16px 0; font-size: 0.9em;"><strong>Veces</strong>: cantidad de veces que se ha trabajado la letra en el año.</p>';
+            graficosHTML += '<div class="chart-container">';
+
+            Object.entries(territoriosData).forEach(([id, territorio]) => {
+                // Calcular estadísticas del territorio
+                const totalLetras = territorio.letras.length;
+                const totalDiasAtraso = territorio.letras.reduce((sum, l) => sum + l.totalDias, 0);
+                const totalVecesTrabajadas = territorio.letras.reduce((sum, l) => sum + l.xFecha, 0);
+                const promedioVeces = (totalVecesTrabajadas / totalLetras).toFixed(1);
+                
+                // Encontrar el máximo para escalar las barras
+                const maxVeces = Math.max(...territorio.letras.map(l => l.xFecha));
+                const maxDias = Math.max(...territorio.letras.map(l => l.totalDias));
+                const maxValue = Math.max(maxVeces, maxDias, 1);
+
+                // Generar barras del gráfico
+                let barsHTML = '';
+                territorio.letras.forEach(letra => {
+                    const heightVeces = (letra.xFecha / maxValue) * 100;
+                    const heightDias = (letra.totalDias / maxValue) * 100;
+                    
+                    barsHTML += `
+                        <div style="flex: 1; margin: 0 2px; display: flex; flex-direction: column; align-items: center;">
+                            <div style="font-size: 0.7em; color: #2c3e50; font-weight: bold; margin-bottom: 3px;">${letra.letra}</div>
+                            <div style="display: flex; gap: 2px; width: 100%; height: 120px; align-items: flex-end;">
+                                <div class="bar" style="height: ${heightVeces}%; background: linear-gradient(to top, #3498db, #5dade2); position: relative;" title="Veces: ${letra.xFecha}">
+                                    ${letra.xFecha > 0 ? `<span style="font-size: 0.7em; color: white; font-weight: bold;">${letra.xFecha}</span>` : ''}
+                                </div>
+                                ${letra.totalDias > 0 ? `
+                                <div class="bar" style="height: ${heightDias}%; background: linear-gradient(to top, #e74c3c, #ec7063); position: relative;" title="Atraso: ${letra.totalDias}">
+                                    <span style="font-size: 0.7em; color: white; font-weight: bold;">${letra.totalDias}</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                graficosHTML += `
+                    <div class="chart-card">
+                        <h4>${territorio.nombre}</h4>
+                        <div style="height: 150px; display: flex; align-items: flex-end; padding: 5px;">
+                            ${barsHTML}
+                        </div>
+                        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 10px; font-size: 0.75em;">
+                            <div style="display: flex; align-items: center; gap: 3px;" title="Veces: cantidad de veces que se ha trabajado la letra en el año">
+                                <div style="width: 12px; height: 12px; background: linear-gradient(to right, #3498db, #5dade2); border-radius: 2px;"></div>
+                                <span>Veces</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 3px;" title="Atraso: días acumulados sin trabajar por letra">
+                                <div style="width: 12px; height: 12px; background: linear-gradient(to right, #e74c3c, #ec7063); border-radius: 2px;"></div>
+                                <span>Atraso</span>
+                            </div>
+                        </div>
+                        <div class="chart-stats">
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Letras</div>
+                                <div class="chart-stat-value">${totalLetras}</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Total Veces</div>
+                                <div class="chart-stat-value">${totalVecesTrabajadas}</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Días Atraso</div>
+                                <div class="chart-stat-value" style="color: ${totalDiasAtraso > 0 ? '#e74c3c' : '#27ae60'};">${totalDiasAtraso}</div>
+                            </div>
+                            <div class="chart-stat">
+                                <div class="chart-stat-label">Promedio</div>
+                                <div class="chart-stat-value">${territorio.promedio}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            graficosHTML += '</div>';
+
+            document.getElementById('statsContainer').innerHTML = graficosHTML;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        function mostrarTopAtrasos() {
+            const items = Object.entries(territoriosData).map(([id, territorio]) => {
+                const totalDias = territorio.letras.reduce((sum, l) => sum + (l.totalDias || 0), 0);
+                return { id: Number(id), nombre: territorio.nombre, totalDias };
+            });
+
+            const top5 = items.sort((a, b) => b.totalDias - a.totalDias).slice(0, 5);
+            const maxDias = Math.max(...top5.map(t => t.totalDias), 1);
+
+            let html = '<h3 style="color: #2c3e50; margin-bottom: 20px;">🔥 Top 5 territorios con más días de atraso</h3>';
+            html += '<div class="chart-container">';
+
+            top5.forEach(t => {
+                const territorio = territoriosData[t.id];
+                const letrasConAtraso = (territorio?.letras || [])
+                    .filter(l => (l.totalDias || 0) > 0)
+                    .map(l => `${l.letra} (${l.totalDias})`)
+                    .join(', ');
+                const height = (t.totalDias / maxDias) * 100;
+                html += `
+                    <div class="chart-card">
+                        <h4>${t.nombre} (T.${t.id})</h4>
+                        <div style="height: 150px; display: flex; align-items: flex-end; padding: 5px;">
+                            <div class="bar" style="height: ${height}%; width: 100%; background: linear-gradient(to top, #e74c3c, #ec7063); position: relative;" title="Atraso: ${t.totalDias}">
+                                <span style="font-size: 0.9em; color: white; font-weight: bold;">${t.totalDias}</span>
+                            </div>
+                        </div>
+                        <div style="font-size: 0.85em; color: #7f8c8d; margin-top: 8px;">
+                            <strong>Letras con atraso:</strong> ${letrasConAtraso || '—'}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+
+            const container = document.getElementById('statsContainer');
+            container.innerHTML = html;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        function mostrarReportes() {
+            const reportesHTML = `
+                <h3 style="color: #2c3e50; margin-bottom: 20px;">📄 Generar Reportes</h3>
+                <p style="color: #7f8c8d; margin-bottom: 30px;">Selecciona el tipo de reporte que deseas generar</p>
+                
+                <div class="report-options">
+                    <div class="report-card" onclick="generarReporteWeb()">
+                        <div class="report-card-icon">🌐</div>
+                        <div class="report-card-title">Reporte Web</div>
+                        <div class="report-card-desc">Visualizar reporte completo en pantalla</div>
+                    </div>
+                    
+                    <div class="report-card" onclick="generarReportePDF()">
+                        <div class="report-card-icon">📑</div>
+                        <div class="report-card-title">Exportar PDF</div>
+                        <div class="report-card-desc">Descargar reporte en formato PDF</div>
+                    </div>
+                    
+                    <div class="report-card" onclick="generarReporteExcel()">
+                        <div class="report-card-icon">📊</div>
+                        <div class="report-card-title">Exportar Excel</div>
+                        <div class="report-card-desc">Descargar datos en formato CSV/Excel</div>
+                    </div>
+                    
+                    <div class="report-card" onclick="imprimirReporte()">
+                        <div class="report-card-icon">🖨️</div>
+                        <div class="report-card-title">Imprimir</div>
+                        <div class="report-card-desc">Imprimir reporte directamente</div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('statsContainer').innerHTML = reportesHTML;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        function generarReporteWeb() {
+            let reporteHTML = `
+                <div class="print-only" style="text-align: center; margin-bottom: 30px;">
+                    <h1>Panel de Territorios - Congregación Loncomilla</h1>
+                    <p>Fecha: ${new Date().toLocaleDateString('es-ES')}</p>
+                </div>
+                
+                <h3 style="color: #2c3e50; margin-bottom: 20px;">📋 Reporte Completo de Territorios</h3>
+            `;
+
+            Object.entries(territoriosData).forEach(([id, territorio]) => {
+                const totalDiasAtraso = territorio.letras.reduce((sum, l) => sum + l.totalDias, 0);
+                const totalVecesTrabajadas = territorio.letras.reduce((sum, l) => sum + l.xFecha, 0);
+
+                reporteHTML += `
+                    <div style="background: white; border: 1px solid #ddd; border-radius: 10px; padding: 20px; margin-bottom: 20px; page-break-inside: avoid;">
+                        <h4 style="color: #2c3e50; margin: 0 0 15px 0; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
+                            ${territorio.nombre}
+                        </h4>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px;">
+                            <div style="background: #ecf0f1; padding: 10px; border-radius: 5px; text-align: center;">
+                                <div style="font-size: 0.8em; color: #7f8c8d;">Letras</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #2c3e50;">${territorio.letras.length}</div>
+                            </div>
+                            <div style="background: #ecf0f1; padding: 10px; border-radius: 5px; text-align: center;">
+                                <div style="font-size: 0.8em; color: #7f8c8d;">Veces Trabajadas</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #2c3e50;">${totalVecesTrabajadas}</div>
+                            </div>
+                            <div style="background: #ecf0f1; padding: 10px; border-radius: 5px; text-align: center;">
+                                <div style="font-size: 0.8em; color: #7f8c8d;">Días Atraso</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: ${totalDiasAtraso > 0 ? '#e74c3c' : '#27ae60'};">${totalDiasAtraso}</div>
+                            </div>
+                            <div style="background: #ecf0f1; padding: 10px; border-radius: 5px; text-align: center;">
+                                <div style="font-size: 0.8em; color: #7f8c8d;">Promedio</div>
+                                <div style="font-size: 1.5em; font-weight: bold; color: #2c3e50;">${territorio.promedio}</div>
+                            </div>
+                        </div>
+
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+                            <thead>
+                                <tr style="background: #3498db; color: white;">
+                                    <th style="padding: 8px; text-align: left;">Letra</th>
+                                    <th style="padding: 8px; text-align: center;">Total Días</th>
+                                    <th style="padding: 8px; text-align: center;">X Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${territorio.letras.map(letra => `
+                                    <tr style="border-bottom: 1px solid #ecf0f1;">
+                                        <td style="padding: 8px;"><strong>${letra.letra}</strong></td>
+                                        <td style="padding: 8px; text-align: center; color: ${letra.totalDias > 0 ? '#e74c3c' : '#27ae60'};">${letra.totalDias}</td>
+                                        <td style="padding: 8px; text-align: center;">${letra.xFecha}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+
+            reporteHTML += `
+                <div class="no-print" style="text-align: center; margin-top: 30px;">
+                    <button onclick="imprimirReporte()" style="padding: 12px 30px; background: #3498db; color: white; border: none; border-radius: 5px; font-size: 1em; cursor: pointer; margin-right: 10px;">
+                        🖨️ Imprimir Reporte
+                    </button>
+                    <button onclick="closeStatsModal()" style="padding: 12px 30px; background: #95a5a6; color: white; border: none; border-radius: 5px; font-size: 1em; cursor: pointer;">
+                        Cerrar
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('statsContainer').innerHTML = reporteHTML;
+        }
+
+        function generarReportePDF() {
+            generarReporteWeb();
+            setTimeout(() => {
+                window.print();
+            }, 500);
+        }
+
+        function generarReporteExcel() {
+            let csv = 'Territorio,Letra,Total Días,X Fecha,Promedio\n';
+            
+            Object.entries(territoriosData).forEach(([id, territorio]) => {
+                territorio.letras.forEach((letra, index) => {
+                    csv += `"${territorio.nombre}","${letra.letra}",${letra.totalDias},${letra.xFecha}`;
+                    if (index === 0) {
+                        csv += `,${territorio.promedio}`;
+                    }
+                    csv += '\n';
+                });
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `reporte_territorios_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            alert('✅ Archivo CSV descargado. Puedes abrirlo con Excel.');
+        }
+
+        function imprimirReporte() {
+            window.print();
+        }
+
+        // Modal: Actualizar datos pegando texto
+        function mostrarActualizar() {
+            const html = `
+                <div class="modal-header">
+                    <h2>🔄 Actualizar Datos de Territorio</h2>
+                    <button class="close-btn" onclick="closeStatsModal()">✕</button>
+                </div>
+                <div style="padding: 10px 0; display: grid; gap: 10px;">
+                    <p style="color:#7f8c8d; font-size:0.95em;">Pega las filas con formato: <strong>LETRA, Total días, X FECHA</strong>. Acepta separadores coma, punto y coma, tab o espacios.</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <input id="updTerrId" type="number" min="1" max="41" placeholder="N° Territorio (1-41)" style="padding:8px; border:1px solid #ddd; border-radius:6px;" />
+                        <input id="updNombre" type="text" placeholder="Nombre (opcional)" style="padding:8px; border:1px solid #ddd; border-radius:6px;" />
+                        <input id="updPromedio" type="number" step="1" placeholder="Promedio (opcional)" style="padding:8px; border:1px solid #ddd; border-radius:6px;" />
+                    </div>
+                    <textarea id="updTextarea" rows="10" placeholder="Ejemplo:\nA, 0, 5\nB; 1; 4\nC\t0\t5" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px;"></textarea>
+                    <div style="display:flex; gap:8px;">
+                        <button onclick="previsualizarActualizacion()" style="padding:8px 12px; border:none; border-radius:6px; background:#3498db; color:white; cursor:pointer;">Previsualizar</button>
+                        <button onclick="aplicarActualizacion()" style="padding:8px 12px; border:none; border-radius:6px; background:#27ae60; color:white; cursor:pointer;">Actualizar</button>
+                    </div>
+                    <div id="updError" style="color:#e74c3c; font-weight:bold;"></div>
+                    <div id="updPreview" style="margin-top:8px;"></div>
+                </div>
+            `;
+            document.getElementById('statsContainer').innerHTML = html;
+            document.getElementById('statsModal').classList.add('active');
+        }
+
+        function parseLineTokens(line) {
+            // Normaliza separadores ; \t múltiples espacios a coma
+            let norm = line.trim().replace(/[;\t]+/g, ',').replace(/\s{2,}/g, ' ');
+            // Si hay espacios sin comas, intenta separar por espacios
+            if (!norm.includes(',')) {
+                const partsSpace = norm.split(/\s+/);
+                if (partsSpace.length >= 3) return partsSpace;
+            }
+            return norm.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        }
+
+        function parseTextarea(text) {
+            const lines = text.split(/\r?\n/);
+            const items = [];
+            const errors = [];
+            lines.forEach((line, idx) => {
+                const trimmed = line.trim();
+                if (!trimmed) return;
+                if (/^t\s*\.|^promedio/i.test(trimmed)) return; // ignora líneas de títulos
+                const parts = parseLineTokens(trimmed);
+                if (parts.length < 3) {
+                    errors.push(`Línea ${idx + 1}: formato inválido (se esperan 3 columnas)`);
+                    return;
+                }
+                const letra = String(parts[0]).toUpperCase();
+                const totalDias = parseInt(parts[1], 10);
+                const xFecha = parseInt(parts[2], 10);
+                if (!letra || isNaN(totalDias) || isNaN(xFecha)) {
+                    errors.push(`Línea ${idx + 1}: valores inválidos (letra/días/xFecha)`);
+                    return;
+                }
+                items.push({ letra, totalDias, xFecha });
+            });
+            return { items, errors };
+        }
+
+        function previsualizarActualizacion() {
+            const txt = document.getElementById('updTextarea').value || '';
+            const { items, errors } = parseTextarea(txt);
+            const errEl = document.getElementById('updError');
+            const prevEl = document.getElementById('updPreview');
+            errEl.textContent = errors.join('\n');
+            if (items.length === 0) {
+                prevEl.innerHTML = '<p style="color:#7f8c8d;">Sin filas válidas para mostrar.</p>';
+                return;
+            }
+            const rows = items.map(i => `<tr><td><strong>${i.letra}</strong></td><td style=\"text-align:center\">${i.totalDias}</td><td style=\"text-align:center\">${i.xFecha}</td></tr>`).join('');
+            prevEl.innerHTML = `
+                <h4 style="color:#2c3e50;">Previsualización</h4>
+                <table style="width:100%; border-collapse:collapse;">
+                    <thead>
+                        <tr style="background:#3498db; color:white;">
+                            <th style="padding:6px; text-align:left;">Letra</th>
+                            <th style="padding:6px; text-align:center;">Total días</th>
+                            <th style="padding:6px; text-align:center;">X Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        }
+
+        function aplicarActualizacion() {
+            const terrId = parseInt(document.getElementById('updTerrId').value, 10);
+            const nombre = (document.getElementById('updNombre').value || '').trim();
+            const promedioVal = document.getElementById('updPromedio').value;
+            const txt = document.getElementById('updTextarea').value || '';
+            const { items, errors } = parseTextarea(txt);
+            const errEl = document.getElementById('updError');
+            errEl.textContent = '';
+
+            if (isNaN(terrId) || terrId < 1 || terrId > 41) {
+                errEl.textContent = 'Debe indicar un número de territorio válido (1–41).';
+                return;
+            }
+            if (errors.length) {
+                errEl.textContent = 'Corrige errores antes de actualizar:\n' + errors.join('\n');
+                return;
+            }
+            if (items.length === 0) {
+                errEl.textContent = 'No hay filas válidas para actualizar.';
+                return;
+            }
+
+            const current = territoriosData[terrId] || { nombre: `Territorio ${terrId}`, letras: [], promedio: 0 };
+            territoriosData[terrId] = {
+                nombre: nombre || current.nombre,
+                letras: items,
+                promedio: promedioVal ? parseInt(promedioVal, 10) : current.promedio
+            };
+
+            // Actualizar colores/títulos de botones
+            setButtonAlertColors();
+
+            alert(`✅ Territorio T.${terrId} actualizado (${items.length} letras).`);
+        }
+
+        // Cerrar modal de estadísticas al hacer clic fuera
+        window.addEventListener('click', function(event) {
+            const statsModal = document.getElementById('statsModal');
+            if (event.target === statsModal) {
+                closeStatsModal();
+            }
+        });
+
+        // Colorea los botones según días de atraso: verde (0) / rojo (>0)
+        function setButtonAlertColors() {
+            for (let i = 1; i <= 41; i++) {
+                const btn = document.querySelector(`[data-territorio="T.${i}"]`);
+                const territorio = territoriosData[i];
+                if (!btn || !territorio || !Array.isArray(territorio.letras)) continue;
+
+                const totalDiasAtraso = territorio.letras.reduce((sum, l) => sum + (l.totalDias || 0), 0);
+                const totalLetras = territorio.letras.length;
+                const promedio = territorio.promedio;
+                const letrasConAtraso = territorio.letras
+                    .filter(l => (l.totalDias || 0) > 0)
+                    .map(l => `${l.letra} (${l.totalDias})`)
+                    .join(', ');
+
+                btn.style.background = totalDiasAtraso > 0 ? '#e74c3c' : '#27ae60';
+                btn.title = `${territorio.nombre}\nLetras: ${totalLetras} | Atraso: ${totalDiasAtraso} | Promedio: ${promedio}` + (letrasConAtraso ? `\nLetras con atraso: ${letrasConAtraso}` : '');
+            }
+        }
+
+        // Ejecutar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', setButtonAlertColors);
+    </script>
+</body>
+</html>

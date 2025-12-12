@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANEL TERRITORIOS CONGREGACION LONCOMILLA</title>
+    <title>Programa Territorios Loncomilla</title>
     <style>
         * {
             margin: 0;
@@ -523,6 +523,10 @@
     </style>
 </head>
 <body>
+    <!-- Fecha y hora en esquina superior derecha -->
+    <div id="datetimeDisplay" style="position: fixed; top: 10px; right: 12px; background: rgba(44,62,80,0.9); color: #ecf0f1; padding: 8px 12px; border-radius: 8px; font-size: 0.95em; box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 1000;">
+        --:-- --/--/----
+    </div>
     <div class="main-layout">
         <!-- Menú lateral -->
         <aside class="sidebar">
@@ -534,7 +538,10 @@
                 <li><button onclick="mostrarTopAtrasos()">🔥 Top 5 Atrasos</button></li>
                 <li><button onclick="mostrarReportes()">📄 Reportes</button></li>
                 <li><button onclick="window.open('https://www.google.com/maps/@-35.5970941,-71.7360199,15z/data=!3m1!4b1!4m2!6m1!1s1cZ9jXIbmlDjukHoYE_TVe09sZkg4Saw?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwNy4wIKXMDSoKLDEwMDc5MjA2OUgBUAM%3D','_blank')">🗺️ Links Mapa</button></li>
+                <li><button onclick="window.open('https://drive.google.com/drive/folders/18yXsw9geBuO3ka6NpZAGHhKAxKDTPDo5','_blank')">🧾 Mapas en PDF</button></li>
                 <li><button onclick="mostrarActualizar()">🔄 Actualizar Datos</button></li>
+                <li><button onclick="mostrarNoPasar()">⛔ No Pasar</button></li>
+                <li><button onclick="restaurarDatosPorDefecto()">♻️ Restaurar por defecto</button></li>
             </ul>
         </aside>
 
@@ -1331,6 +1338,24 @@
 
         };
 
+        // Persistencia en localStorage
+        const STORAGE_KEY = 'territoriosData';
+        function loadTerritoriosData(){
+            try{
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if(!raw) return;
+                const parsed = JSON.parse(raw);
+                if(parsed && typeof parsed === 'object'){
+                    territoriosData = parsed;
+                }
+            }catch(e){ console.warn('No se pudo cargar dataset desde localStorage:', e); }
+        }
+        function saveTerritoriosData(){
+            try{
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(territoriosData));
+            }catch(e){ console.warn('No se pudo guardar dataset en localStorage:', e); }
+        }
+
         function openModal(territorioId = 1) {
             const data = territoriosData[territorioId];
             if (!data) {
@@ -1972,6 +1997,41 @@
         function imprimirReporte() {
             window.print();
         }
+        // Listado interno: No Pasar
+        function mostrarNoPasar(){
+            const dataNoPasar = [
+                { territorio: 10, nombre: 'Territorio Nº10', items: ['Los Almendros 934'] },
+                { territorio: 16, nombre: 'Territorio Nº16', items: ['Chorrillos 733', 'Chorrillos 748'] },
+                { territorio: 19, nombre: 'Territorio Nº19', items: ['Pedro León Gallo #1245'] },
+                { territorio: 37, nombre: 'Territorio N°37', items: ['Baldomero Lillo N°129'] }
+            ];
+
+            let html = `
+                <div class="modal-header">
+                    <h2>⛔ No Pasar</h2>
+                    <button class="close-btn" onclick="closeStatsModal()">✕</button>
+                </div>
+            `;
+            html += '<div style="padding:12px 0;">';
+            dataNoPasar.forEach(entry => {
+                const list = entry.items.map(i => `<li>${i}</li>`).join('');
+                html += `
+                    <div style="background:#ffffff; border:1px solid #ddd; border-radius:8px; margin-bottom:12px;">
+                        <div style="background:#ecf0f1; padding:10px 12px; display:flex; justify-content:space-between; align-items:center;">
+                            <div><strong>${entry.nombre}</strong> <span style="color:#7f8c8d">(T.${entry.territorio})</span></div>
+                        </div>
+                        <div style="padding:10px 12px;">
+                            <ul style="margin:0; padding-left:18px; color:#2c3e50;">${list}</ul>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            const container = document.getElementById('statsContainer');
+            container.innerHTML = html;
+            document.getElementById('statsModal').classList.add('active');
+        }
 
         // Modal: Actualizar datos pegando texto
         function mostrarActualizar() {
@@ -2094,7 +2154,22 @@
             // Actualizar colores/títulos de botones
             setButtonAlertColors();
 
+            // Guardar persistente
+            saveTerritoriosData();
+
             alert(`✅ Territorio T.${terrId} actualizado (${items.length} letras).`);
+        }
+
+        // Opcional: restaurar dataset al estado inicial del archivo
+        function restaurarDatosPorDefecto(){
+            if(!confirm('¿Seguro que deseas restaurar el dataset por defecto? Se perderán cambios guardados.')) return;
+            try{
+                localStorage.removeItem(STORAGE_KEY);
+                // Recargar página para tomar el dataset embebido
+                location.reload();
+            }catch(e){
+                alert('No se pudo restaurar: ' + e.message);
+            }
         }
 
         // Cerrar modal de estadísticas al hacer clic fuera
@@ -2125,8 +2200,28 @@
             }
         }
 
+        // Fecha y hora en tiempo real
+        function startDateTimeClock(){
+            const el = document.getElementById('datetimeDisplay');
+            if(!el) return;
+            function fmt(){
+                const now = new Date();
+                const optsDate = { year: 'numeric', month: 'long', day: 'numeric' };
+                const optsTime = { hour: '2-digit', minute: '2-digit' };
+                const fecha = now.toLocaleDateString('es-ES', optsDate);
+                const hora = now.toLocaleTimeString('es-ES', optsTime);
+                el.textContent = `${hora} — ${fecha}`;
+            }
+            fmt();
+            setInterval(fmt, 1000);
+        }
+
         // Ejecutar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', setButtonAlertColors);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTerritoriosData();
+            setButtonAlertColors();
+            startDateTimeClock();
+        });
     </script>
 </body>
 </html>
